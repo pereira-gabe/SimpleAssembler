@@ -32,6 +32,7 @@ O projeto consiste em dois componentes principais:
 ## Funcionamento
 
 O *assembler* traduz instruções contidas no arquivo *instructions.txt* e gera o arquivo *machine_code.txt* com as instruções Assembly em código de máquina. No momento não existe suporte à pseudo-instruçoes, syscalls, segmento .data, não verifica erros de todo tipo e várias outras coisas. Considere o arquivo *instructions.txt* como o segmento .text do código assembly.
+
 Ao fim, o processador imprime o valor de todos os registradores.
 
 ---
