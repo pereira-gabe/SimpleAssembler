@@ -37,8 +37,10 @@ Ao fim, o processador imprime o valor de todos os registradores.
 
 ---
 
-## Objetivos futuros
+## À fazer
 
+- Terminar o assembler e adicioná-lo no repositório
+- Fazer o processador ler o arquivo instructions.txt e escrever no machine_code.txt de fato
 - Melhorar o interpretador de instruções RV32I para acomodar syscalls
 - Implementar um runtime simulator simples para acompanhar o valor dos registradores
 - Implementar suporte ao segmento .data
