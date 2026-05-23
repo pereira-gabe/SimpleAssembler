@@ -143,6 +143,7 @@ void execute(uint32_t instruction) {
 }
 
 int main() {
+<<<<<<< HEAD
     FILE *file = fopen("../machine_code.txt", "r");
 
     if (file == NULL) {
@@ -160,6 +161,13 @@ int main() {
         printf("instructions limit exceeded.\nMax instructions supported: %d", MEM_SIZE);
         return 2;
     }
+=======
+    memory[0] = 0x00A00093;
+    memory[1] = 0x01400113;
+    memory[2] = 0x002081B3;
+
+    int instructions = 3;
+>>>>>>> 1ad59ec9891ad36bab7917bcbcec8767ab47dd75
 
     while(pc < instructions * 4) {
         uint32_t instruction = memory[pc / 4];
@@ -169,4 +177,8 @@ int main() {
     print_registers();
 
     return 0;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 1ad59ec9891ad36bab7917bcbcec8767ab47dd75
