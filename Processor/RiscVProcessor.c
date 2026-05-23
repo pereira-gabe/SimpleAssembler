@@ -52,11 +52,11 @@ char* abi_table(int reg){
 }
 
 void print_registers() {
-    printf("========= Registers Table =========\n");
+    printf("============ Registers Table ============\n");
 
     for(int i = 0; i < 16; i++) {
         printf(
-            "%-4s (x%-2d) = %-2u  |  %-4s (x%-2d) = %u\n",
+            "%-4s (x%-2d) = %-2d     |     %-4s (x%-2d) = %d\n",
             abi_table(i),
             i,
             reg[i],
@@ -160,11 +160,6 @@ int main() {
         printf("instructions limit exceeded.\nMax instructions supported: %d", MEM_SIZE);
         return 2;
     }
-    memory[0] = 0x00A00093;
-    memory[1] = 0x01400113;
-    memory[2] = 0x002081B3;
-
-    int instructions = 3;
 
     while(pc < instructions * 4) {
         uint32_t instruction = memory[pc / 4];
