@@ -52,8 +52,7 @@ char* abi_table(int reg){
 }
 
 void print_registers() {
-    printf("\n========= Registers Table =========\n"
-    );
+    printf("========= Registers Table =========\n");
 
     for(int i = 0; i < 16; i++) {
         printf(
@@ -77,104 +76,66 @@ void execute(uint32_t instruction) {
     uint32_t funct7 = (instruction >> 25) & 0x7F;
 
     int32_t imm_i = sign_extend((instruction >> 20) & 0xFFF, 12);
-
-    int32_t imm_s = sign_extend(
-        (((instruction >> 25) & 0x7F) << 5) |
-        ((instruction >> 7) & 0x1F),
-        12
-    );
-
-    int32_t imm_b = sign_extend(
-        (((instruction >> 31) & 0x1) << 12) |
-        (((instruction >> 7) & 0x1) << 11) |
-        (((instruction >> 25) & 0x3F) << 5) |
-        (((instruction >> 8) & 0xF) << 1),
-        13
-    );
+    int32_t imm_s = sign_extend((((instruction >> 25) & 0x7F) << 5) |((instruction >> 7) & 0x1F),12);
+    int32_t imm_b = sign_extend((((instruction >> 31) & 0x1) << 12) |(((instruction >> 7) & 0x1) << 11) |(((instruction >> 25) & 0x3F) << 5) |(((instruction >> 8) & 0xF) << 1),13);
 
     switch(opcode) {
-
-        case 0x33:
-
+        case 0x33:     // R-Type
             switch(funct3) {
-
                 case 0x0:
-
-                    if(funct7 == 0x00) {
+                    if(funct7 == 0x00) {        // ADD
                         reg[rd] = reg[rs1] + reg[rs2];
-                        printf("ADD x%d, x%d, x%d\n", rd, rs1, rs2);
                     }
 
-                    else if(funct7 == 0x20) {
+                    else if(funct7 == 0x20) {   // SUB
                         reg[rd] = reg[rs1] - reg[rs2];
-                        printf("SUB x%d, x%d, x%d\n", rd, rs1, rs2);
                     }
 
                     break;
-
-                case 0x7:
+                case 0x7:                       // AND
                     reg[rd] = reg[rs1] & reg[rs2];
-                    printf("AND x%d, x%d, x%d\n", rd, rs1, rs2);
                     break;
-
-                case 0x6:
+                case 0x6:                       // OR
                     reg[rd] = reg[rs1] | reg[rs2];
-                    printf("OR x%d, x%d, x%d\n", rd, rs1, rs2);
                     break;
             }
-
             pc += 4;
             break;
 
-        case 0x13:
-
-            if(funct3 == 0x0) {
+        case 0x13:     // I-Type
+            if(funct3 == 0x0) {                 // ADDI
                 reg[rd] = reg[rs1] + imm_i;
-                printf("ADDI x%d, x%d, %d\n", rd, rs1, imm_i);
             }
-
             pc += 4;
             break;
 
-        case 0x03:
-
-            if(funct3 == 0x2) {
+        case 0x03:     // LOAD
+            if(funct3 == 0x2) {                 // LW
                 reg[rd] = memory[(reg[rs1] + imm_i) / 4];
-                printf("LW x%d, %d(x%d)\n", rd, imm_i, rs1);
             }
-
             pc += 4;
             break;
 
-        case 0x23:
-
-            if(funct3 == 0x2) {
+        case 0x23:     // STORE
+            if(funct3 == 0x2) {                 // SW
                 memory[(reg[rs1] + imm_s) / 4] = reg[rs2];
-                printf("SW x%d, %d(x%d)\n", rs2, imm_s, rs1);
             }
-
             pc += 4;
             break;
 
-        case 0x63:
-
-            if(funct3 == 0x0) {
-
-                printf("BEQ x%d, x%d, %d\n", rs1, rs2, imm_b);
-
+        case 0x63:     // BRANCH
+            if(funct3 == 0x0) {                 // BEQ
                 if(reg[rs1] == reg[rs2]) {
                     pc += imm_b;
                 }
-
                 else {
                     pc += 4;
                 }
             }
-
             break;
 
         default:
-            printf("Instrucao nao suportada!\n");
+            printf("unsuported instruction\n");
             exit(1);
     }
 
@@ -189,12 +150,7 @@ int main() {
     int instructions = 3;
 
     while(pc < instructions * 4) {
-
         uint32_t instruction = memory[pc / 4];
-
-        printf("PC = %u\n", pc);
-        printf("Instrucao = 0x%08X\n", instruction);
-
         execute(instruction);
     }
 
