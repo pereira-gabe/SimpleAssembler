@@ -8,47 +8,15 @@ uint32_t memory[MEM_SIZE];
 uint32_t reg[32];
 uint32_t pc = 0;
 
+char** abi_convention = NULL;
+
 int32_t sign_extend(int32_t value, int bits) {
     int32_t mask = 1 << (bits - 1);
     return (value ^ mask) - mask;
 }
 
 char* abi_table(int reg){
-    switch(reg){
-        case 0:  return "zero";
-        case 1:  return "ra";
-        case 2:  return "sp";
-        case 3:  return "gp";
-        case 4:  return "tp";
-        case 5:  return "t0";
-        case 6:  return "t1";
-        case 7:  return "t2";
-        case 8:  return "s0";
-        case 9:  return "s1";
-        case 10: return "a0";
-        case 11: return "a1";
-        case 12: return "a2";
-        case 13: return "a3";
-        case 14: return "a4";
-        case 15: return "a5";
-        case 16: return "a6";
-        case 17: return "a7";
-        case 18: return "s2";
-        case 19: return "s3";
-        case 20: return "s4";
-        case 21: return "s5";
-        case 22: return "s6";
-        case 23: return "s7";
-        case 24: return "s8";
-        case 25: return "s9";
-        case 26: return "s10";
-        case 27: return "s11";
-        case 28: return "t3";
-        case 29: return "t4";
-        case 30: return "t5";
-        case 31: return "t6";
-        default: return "invalid";
-    }
+    return abi_convention[reg];
 }
 
 void print_registers() {
@@ -143,6 +111,40 @@ void execute(uint32_t instruction) {
 }
 
 int main() {
+    abi_convention = malloc(32 * sizeof(char*));
+    abi_convention[0]  = "zero";
+    abi_convention[1]  = "ra";
+    abi_convention[2]  = "sp";
+    abi_convention[3]  = "gp";
+    abi_convention[4]  = "tp";
+    abi_convention[5]  = "t0";
+    abi_convention[6]  = "t1";
+    abi_convention[7]  = "t2";
+    abi_convention[8]  = "s0";
+    abi_convention[9]  = "s1";
+    abi_convention[10] = "a0";
+    abi_convention[11] = "a1";
+    abi_convention[12] = "a2";
+    abi_convention[13] = "a3";
+    abi_convention[14] = "a4";
+    abi_convention[15] = "a5";
+    abi_convention[16] = "a6";
+    abi_convention[17] = "a7";
+    abi_convention[18] = "s2";
+    abi_convention[19] = "s3";
+    abi_convention[20] = "s4";
+    abi_convention[21] = "s5";
+    abi_convention[22] = "s6";
+    abi_convention[23] = "s7";
+    abi_convention[24] = "s8";
+    abi_convention[25] = "s9";
+    abi_convention[26] = "s10";
+    abi_convention[27] = "s11";
+    abi_convention[28] = "t3";
+    abi_convention[29] = "t4";
+    abi_convention[30] = "t5";
+    abi_convention[31] = "t6";
+
     FILE *file = fopen("../machine_code.txt", "r");
 
     if (file == NULL) {
