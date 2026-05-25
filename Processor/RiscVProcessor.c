@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <stdint.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #define MEM_SIZE 1024
 
@@ -143,7 +143,7 @@ int main() {
     abi_convention[30] = "t5";
     abi_convention[31] = "t6";
 
-    FILE *file = fopen("../machine_code.txt", "r");
+    FILE *file = fopen("machine_code.txt", "r");
 
     if (file == NULL) {
         printf("error opening machine_code.txt\n");

@@ -26,6 +26,7 @@ O projeto consiste em dois componentes principais:
 
 - Tradução de instruções RISC-V RV32I para código de máquina hexadecimal (*Assembler*)
 - Simulação básica de execução de instruções RV32I
+- Instruções suportadas até o momento: add, sub, addi
 
 ---
 
@@ -45,3 +46,4 @@ Ao fim, o processador imprime o valor de todos os registradores.
 - Implementar um runtime simulator simples para acompanhar o valor dos registradores
 - Implementar suporte ao segmento .data
 - Suporte à pseudo-instruções
+- Suporte à nomes de registradores da ABI
