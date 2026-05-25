@@ -15,20 +15,16 @@ int32_t sign_extend(int32_t value, int bits) {
     return (value ^ mask) - mask;
 }
 
-char* abi_table(int reg){
-    return abi_convention[reg];
-}
-
 void print_registers() {
     printf("============ Registers Table ============\n");
 
     for(int i = 0; i < 16; i++) {
         printf(
             "%-4s (x%-2d) = %-2d     |     %-4s (x%-2d) = %d\n",
-            abi_table(i),
+            abi_convention[i],
             i,
             reg[i],
-            abi_table(i + 16),
+            abi_convention[i + 16],
             i + 16,
             reg[i + 16]
         );
