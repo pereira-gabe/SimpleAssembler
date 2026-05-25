@@ -170,5 +170,7 @@ int main() {
 
     print_registers();
 
+    free(abi_convention);
+
     return 0;
 }
