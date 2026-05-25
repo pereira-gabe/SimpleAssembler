@@ -23,6 +23,7 @@ int compare(const char* s1, const char* s2){
 uint32_t check_op(const char *op){
     if (compare(op, "add") || compare(op, "sub") || compare(op, "and") || compare(op, "or")) return 0x33;
     if (compare(op, "addi")) return 0x13;
+    if (compare(op, "beq")) return 0x63;
     
     return 0x0;
 }
@@ -31,18 +32,23 @@ void return_funct(const char *op, uint32_t* funct3, uint32_t* funct7){
     if (compare(op, "add")){
         *funct3 = 0x0;
         *funct7 = 0x0;
-    };
+    }
     if (compare(op, "sub")){
         *funct3 = 0x0;
         *funct7 = 0x20;
-    };
-    if (compare(op, "addi")){
-        *funct3 = 0x0;
+    }
+    if (compare(op, "and")){
+        *funct3 = 0x7;
+        *funct7 = 0x0;
+    }
+    if (compare(op, "or")){
+        *funct3 = 0x6;
+        *funct7 = 0x0;
     }
 }
 
 void return_funct3(const char *op, uint32_t* funct3){
-    if (compare(op, "addi")) *funct3 = 0x0;
+    if (compare(op, "addi") || compare(op, "beq")) *funct3 = 0x0;
 }
 
 uint32_t assemble(const char *instruction){
@@ -57,7 +63,8 @@ uint32_t assemble(const char *instruction){
     op_str[i] = '\0';
     op = check_op(op_str);
 
-    if (op == 0x33){    // TYPE R
+    // #### TYPE R
+    if (op == 0x33){   
         j = 0;
         while(instruction[i] != 'x') i++;
         i++;
@@ -88,8 +95,8 @@ uint32_t assemble(const char *instruction){
         result |= (rs2 << 20);
         result |= (funct7 << 25);
     }
-
-    if (op == 0x13){    // TYPE I
+    // #### TYPE I
+    if (op == 0x13){    
         j = 0;
         while(instruction[i] != 'x') i++;
         i++;
@@ -118,6 +125,10 @@ uint32_t assemble(const char *instruction){
         result |= (funct3 << 12);
         result |= (rs1 << 15);
         result |= (imm_i << 20);
+    }
+    // #### TYPE B
+    if (op == 0x63){
+        // à fazer;
     }
 
     //print_hex(result);
