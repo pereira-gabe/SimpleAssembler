@@ -56,7 +56,7 @@ uint32_t assemble(const char *instruction){
     uint32_t op, rd, rs1, rs2, funct3, funct7;
     int32_t imm_i, imm_s, imm_b;
     
-    char op_str[6], rd_str[4], rs1_str[4], rs2_str[4], imm_i_str[5], imm_s_str[11], imm_b_str[11];
+    char op_str[10], rd_str[10], rs1_str[10], rs2_str[10], imm_i_str[10], imm_s_str[20], imm_b_str[20];
     int i, j;
 
     for (i = 0; instruction[i] != ' ' && instruction[i] != '\0'; i++) op_str[i] = instruction[i];
@@ -115,6 +115,7 @@ uint32_t assemble(const char *instruction){
         j = 0;
 
         for (; instruction[i] != '\n' && instruction[i] != '\0'; i++, j++) imm_i_str[j] = instruction[i];
+        imm_i_str[j] = '\0';
         imm_i = atoi(imm_i_str);
         //printf("imm = 0x%08X\n", imm_i);
 
@@ -124,11 +125,59 @@ uint32_t assemble(const char *instruction){
         result |= (rd << 7);
         result |= (funct3 << 12);
         result |= (rs1 << 15);
-        result |= (imm_i << 20);
+        result |= ((imm_i & 0xFFF) << 20);
     }
     // #### TYPE B
-    if (op == 0x63){
-        // à fazer;
+    if (op == 0x63) {
+        j = 0;
+        while(instruction[i] != 'x') i++;
+        i++;
+        for (; instruction[i] != ','; i++, j++) rs1_str[j] = instruction[i];  
+        rs1_str[j] = '\0';
+        rs1 = atoi(rs1_str);
+        j = 0;
+        
+        while(instruction[i] != 'x') i++;
+        i++;
+        for (; instruction[i] != ','; i++, j++) rs2_str[j] = instruction[i];  
+        rs2_str[j] = '\0';
+        rs2 = atoi(rs2_str);
+        j = 0;
+        
+        while (instruction[i] == ' ' || instruction[i] == ',') i++;
+        char imm_str[16];
+        for (; instruction[i] != '\n' && instruction[i] != '\0'; i++, j++) {
+            if (j < 15) imm_str[j] = instruction[i];
+        }
+        imm_str[j] = '\0';
+        int imm = atoi(imm_str);
+
+        return_funct3(op_str, &funct3);
+
+        imm_b_str[0] = ((imm >> 12) & 1) + '0';
+        imm_b_str[1] = ((imm >> 11) & 1) + '0';
+        imm_b_str[2] = ((imm >> 10) & 1) + '0';
+        imm_b_str[3] = ((imm >> 9)  & 1) + '0';
+        imm_b_str[4] = ((imm >> 8)  & 1) + '0';
+        imm_b_str[5] = ((imm >> 7)  & 1) + '0';
+        imm_b_str[6] = ((imm >> 6)  & 1) + '0';
+        imm_b_str[7] = ((imm >> 5)  & 1) + '0';
+        imm_b_str[8] = ((imm >> 4)  & 1) + '0';
+        imm_b_str[9] = ((imm >> 3)  & 1) + '0';
+        imm_b_str[10] = ((imm >> 2) & 1) + '0';
+        imm_b_str[11] = ((imm >> 1) & 1) + '0';
+        imm_b_str[12] = '0';
+        imm_b_str[13] = '\0';
+    
+        result |= (((imm >> 12) & 0x01) << 31); // imm[12]
+        result |= (((imm >> 5)  & 0x3F) << 25); // imm[10:5]
+        result |= (((imm >> 1)  & 0x0F) << 8);  // imm[4:1]
+        result |= (((imm >> 11) & 0x01) << 7);  // imm[11]
+
+        result |= op;
+        result |= (funct3 << 12);
+        result |= (rs1 << 15);
+        result |= (rs2 << 20);
     }
 
     //print_hex(result);
@@ -150,7 +199,7 @@ int main(){
 
     uint32_t inst;
     char str[MAX_CHARACTERS];
-    char inst_str[12];
+    char inst_str[32];
 
     while(fgets(str, MAX_CHARACTERS, instructions) != NULL){
         inst = assemble(str);
