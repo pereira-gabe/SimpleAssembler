@@ -33,6 +33,8 @@ void print_registers() {
             reg[i + 16]
         );
     }
+
+    printf("=========================================\n");
 }
 
 void execute(uint32_t instruction) {
