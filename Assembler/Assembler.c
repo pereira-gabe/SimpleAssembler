@@ -257,7 +257,7 @@ int main(){
         inst = assemble(str);
         line++;
         if (inst == LABEL_FOUND){
-            printf("label\n");
+            if(DEBUG) printf("label\n");
             continue;
         }
         if (inst == INVALID_INSTRUCTION){
