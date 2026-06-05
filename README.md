@@ -26,13 +26,12 @@ O projeto consiste em dois componentes principais:
 
 - Tradução de instruções RISC-V RV32I para código de máquina hexadecimal (*Assembler*)
 - Simulação básica de execução de instruções RV32I
-- Instruções suportadas até o momento: add, sub, addi
+- Instruções suportadas até o momento: add, sub, addi, beq
 
 ---
 
 ## Funcionamento
-
-O *assembler* traduz instruções contidas no arquivo *instructions.txt* e gera o arquivo *machine_code.txt* com as instruções Assembly em código de máquina. No momento não existe suporte à pseudo-instruçoes, syscalls, segmento .data, não verifica erros de todo tipo e várias outras coisas. Considere o arquivo *instructions.txt* como o segmento .text do código assembly.
+Ao rodar o ./run.sh, o *assembler* traduz as instruções contidas no arquivo *instructions.txt*, gerando o arquivo *machine_code.txt* com as instruções Assembly em código de máquina. Após isso, o interpretador de instruções (*RiscVProcessor.c*) executa as instruções e mostra o valor final dos registradores. <br> No momento não existe suporte à pseudo-instruçoes, syscalls, segmento .data, não verifica erros de todo tipo e várias outras coisas. Considere o arquivo *instructions.txt* como o segmento .text do código assembly.
 
 Ao fim, o processador imprime o valor de todos os registradores.
 
