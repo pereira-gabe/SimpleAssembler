@@ -1,6 +1,6 @@
 # SimpleAssembler
 
-O **SimpleAssembler** é um projeto solo desenvolvido com fins educacionais voltado ao estudo da arquitetura RISC-V, focado nos processos de tradução de linguagem Assembly para código de máquina e na execução de instruções em nível de ISA (*Instruction Set Architecture*).
+O **SimpleAssembler** é um projeto solo desenvolvido com fins educacionais voltado ao estudo da arquitetura RISC-V, focado nos processos de tradução de linguagem Assembly para código de máquina e na execução de instruções em nível de ISA (*Instruction Set Architecture*). Vale a pena ressaltar que este "Assembler" se baseia numa abordagem comicamente ingênua e simplificada dos processos de montagem de assemblers e por isso não estou tomando como prioridade otimizações de desempenho, branch prediction e outras funcionalidades encontradas em ferramentas de montagem reais.
 
 O projeto consiste em dois componentes principais:
 
