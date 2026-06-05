@@ -34,7 +34,7 @@ void print_registers() {
 }
 
 void execute(uint32_t instruction) {
-    uint32_t opcode = instruction & 0x7F; // máscara com os 7 últimos bits ligados
+    uint32_t opcode = instruction & 0x7F;
     uint32_t rd     = (instruction >> 7) & 0x1F;
     uint32_t funct3 = (instruction >> 12) & 0x7;
     uint32_t rs1    = (instruction >> 15) & 0x1F;
@@ -157,7 +157,7 @@ int main() {
     fclose(file);
 
     if (instructions > MEM_SIZE / 8){
-        printf("instructions limit exceeded.\nMax instructions supported: %d", MEM_SIZE);
+        printf("Instructions limit exceeded.\nMax number of instructions supported: %d", MEM_SIZE);
         return 2;
     }
 

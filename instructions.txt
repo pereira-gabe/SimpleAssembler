@@ -1,1 +1,7 @@
-beq x15, x15, 8
+addi x15, x15, 10
+addi x16, x16, 20
+addi x17, x17, 10
+beq x15, x16, teste
+addi x17, x17, 100
+teste:
+addi x5, x5, 10
