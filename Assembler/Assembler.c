@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define MAX_CHARACTERS 60
-#define DEBUG 0     // remove this monstruosity before final commit
+#define DEBUG 0
 #define LABEL_FOUND 0xFFFFFFFF
 #define INVALID_INSTRUCTION 0xFFFFFFFE 
 
@@ -21,6 +21,15 @@ Label* label_list = NULL;
 
 FILE *instructions = NULL; 
 FILE *code = NULL; 
+
+static const char* abi_convention[32] = {
+    "zero", "ra", "sp", "gp", "tp",
+    "t0", "t1", "t2",
+    "s0", "s1",
+    "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
+    "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
+    "t3", "t4", "t5", "t6"
+};
 
 void initialize(){
     instructions = fopen("instructions.txt", "r");
@@ -81,7 +90,62 @@ void return_funct3(const char *op, uint32_t* funct3){
     if (strcmp(op, "addi") == 0 || strcmp(op, "beq") == 0) *funct3 = 0x0;
 }
 
-void first_pass(){
+void replace_substring(char *s1, const char *old, const char *s2) {
+    char *pos = strstr(s1, old);
+
+    if (pos == NULL) return;
+
+    size_t old_len = strlen(old);
+    size_t new_len = strlen(s2);
+
+    memmove(pos + new_len, pos + old_len, strlen(pos + old_len) + 1);
+    memcpy(pos, s2, new_len);
+}
+
+void replace_registers(char *inst) {
+    char old[8];
+    char new_reg[8];
+
+    for (int reg = 0; reg < 32; reg++) {
+        char *p = inst;
+
+        while ((p = strstr(p, abi_convention[reg])) != NULL) {
+            size_t len = strlen(abi_convention[reg]);
+
+            char before = (p == inst) ? '\0' : p[-1];
+            char after  = p[len];
+
+            int left_ok =
+                before == '\0' ||
+                before == ' '  ||
+                before == ','  ||
+                before == '('  ||
+                before == ')'  ||
+                before == '\t' ||
+                before == '\n';
+
+            int right_ok =
+                after == '\0' ||
+                after == ' '  ||
+                after == ','  ||
+                after == '('  ||
+                after == ')'  ||
+                after == '\t' ||
+                after == '\n';
+
+            if (left_ok && right_ok) {
+                strcpy(old, abi_convention[reg]);
+                sprintf(new_reg, "x%d", reg);
+
+                replace_substring(inst, old, new_reg);
+
+                p = inst; 
+            } else p++;
+        }
+    }
+}
+
+void first_pass(){  // the translation of the abi reg names is done on the second pass
     int offset = 0;
     char str[MAX_CHARACTERS];
     while(fgets(str, MAX_CHARACTERS, instructions) != NULL){
@@ -94,7 +158,7 @@ void first_pass(){
             label_list[label_list_size].offset = offset;
             label_list_size++;
         }
-        else offset += 4;
+        else offset += 4;   
     }
 }
 
@@ -106,7 +170,7 @@ int return_label_offset(char* label, int offset){
     exit(2);
 }
 
-uint32_t assemble(const char *instruction){
+uint32_t assemble(char *instruction){
     uint32_t result = 0x0;
     uint32_t op, rd, rs1, rs2, funct3, funct7;
     int32_t imm_i, imm_s;
@@ -114,6 +178,8 @@ uint32_t assemble(const char *instruction){
     if (contains(instruction, ':')){   // if the line represents a label
         return LABEL_FOUND;
     }
+
+    replace_registers(instruction);
 
     char op_str[MAX_CHARACTERS], rd_str[10], rs1_str[10], rs2_str[10], imm_i_str[10], imm_s_str[20];
     int i, j;
@@ -245,7 +311,7 @@ int main(){
     }
 
     first_pass();
-    rewind(instructions); // resets the inst pointer to the beginning of the file
+    rewind(instructions); // reset the instruction pointer to the beginning of the file
 
 
     uint32_t inst;

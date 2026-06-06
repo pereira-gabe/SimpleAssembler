@@ -1,7 +1,5 @@
-addi x15, x15, 10
-addi x16, x16, 20
-addi x17, x17, 10
-beq x15, x16, teste
-addi x17, x17, 100
+addi t2, zero, 5 
 teste:
-addi x5, x5, 10
+addi t1, zero, 10
+addi t2, t2, 5
+beq t1, t2, teste

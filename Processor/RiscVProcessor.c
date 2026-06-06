@@ -8,7 +8,14 @@ uint32_t memory[MEM_SIZE];
 uint32_t reg[32];
 uint32_t pc = 0;
 
-char** abi_convention = NULL;
+static const char* abi_convention[32] = {
+    "zero", "ra", "sp", "gp", "tp",
+    "t0", "t1", "t2",
+    "s0", "s1",
+    "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
+    "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11",
+    "t3", "t4", "t5", "t6"
+};
 
 int32_t sign_extend(int32_t value, int bits) {
     int32_t mask = 1 << (bits - 1);
@@ -109,40 +116,6 @@ void execute(uint32_t instruction) {
 }
 
 int main() {
-    abi_convention = malloc(32 * sizeof(char*));
-    abi_convention[0]  = "zero";
-    abi_convention[1]  = "ra";
-    abi_convention[2]  = "sp";
-    abi_convention[3]  = "gp";
-    abi_convention[4]  = "tp";
-    abi_convention[5]  = "t0";
-    abi_convention[6]  = "t1";
-    abi_convention[7]  = "t2";
-    abi_convention[8]  = "s0";
-    abi_convention[9]  = "s1";
-    abi_convention[10] = "a0";
-    abi_convention[11] = "a1";
-    abi_convention[12] = "a2";
-    abi_convention[13] = "a3";
-    abi_convention[14] = "a4";
-    abi_convention[15] = "a5";
-    abi_convention[16] = "a6";
-    abi_convention[17] = "a7";
-    abi_convention[18] = "s2";
-    abi_convention[19] = "s3";
-    abi_convention[20] = "s4";
-    abi_convention[21] = "s5";
-    abi_convention[22] = "s6";
-    abi_convention[23] = "s7";
-    abi_convention[24] = "s8";
-    abi_convention[25] = "s9";
-    abi_convention[26] = "s10";
-    abi_convention[27] = "s11";
-    abi_convention[28] = "t3";
-    abi_convention[29] = "t4";
-    abi_convention[30] = "t5";
-    abi_convention[31] = "t6";
-
     FILE *file = fopen("machine_code.txt", "r");
 
     if (file == NULL) {
@@ -167,8 +140,6 @@ int main() {
     }
 
     print_registers();
-
-    free(abi_convention);
 
     return 0;
 }
