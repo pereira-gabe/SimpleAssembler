@@ -34,15 +34,3 @@ O projeto consiste em dois componentes principais:
 Ao rodar o ./run.sh, o *assembler* traduz as instruções contidas no arquivo *instructions.txt*, gerando o arquivo *machine_code.txt* com as instruções Assembly em código de máquina. Após isso, o interpretador de instruções (*RiscVProcessor.c*) executa as instruções e mostra o valor final dos registradores. <br> No momento não existe suporte à pseudo-instruçoes, syscalls, segmento .data, não verifica erros de todo tipo e várias outras coisas. Considere o arquivo *instructions.txt* como o segmento .text do código assembly.
 
 Ao fim, o processador imprime o valor de todos os registradores.
-
----
-
-## À fazer
-
-- Terminar o assembler e adicioná-lo no repositório
-- Fazer o processador ler o arquivo instructions.txt e escrever no machine_code.txt de fato
-- Melhorar o interpretador de instruções RV32I para acomodar syscalls
-- Implementar um runtime simulator simples para acompanhar o valor dos registradores
-- Implementar suporte ao segmento .data
-- Suporte à pseudo-instruções
-- Suporte à nomes de registradores da ABI
