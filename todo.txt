@@ -1,0 +1,5 @@
+- deixar o parser robusto e adicionar verificações
+- hash table pra labels
+- pseudoinstruções
+- checar memory leak potentials
+- separar o projeto em arquivos
