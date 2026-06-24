@@ -73,19 +73,6 @@ void print_labels(Assembler* as){
     }
 }
 
-/* swapped for reg intepretation approach
-void replace_substring(char *s1, const char *old, const char *s2) {
-    char *pos = strstr(s1, old);
-
-    if (pos == NULL) return;
-
-    size_t old_len = strlen(old);
-    size_t new_len = strlen(s2);
-
-    memmove(pos + new_len, pos + old_len, strlen(pos + old_len) + 1);
-    memcpy(pos, s2, new_len);
-}*/
-
 void first_pass(Assembler* as){
     uint32_t offset = 0;
     char line[MAX_LINE];
